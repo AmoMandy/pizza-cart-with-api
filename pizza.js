@@ -1,30 +1,44 @@
 document.addEventListener('alpine:init', () => {
+    Alpine.data('loginData', () => ({
+        username: '',
+        loggedIn: false,
+
+        login() {
+            if (this.username) {
+                this.loggedIn = true;
+            }
+        },
+
+        logout() {
+            this.loggedIn = false;
+            this.username = '';
+        }
+    }));
     Alpine.data('pizzaCartAPI', function () {
         return {
             pizzas: [],
-            usename: 'AmoMandy',
+            // username: 'AmoMandy',
             cart: [],
             totals: {
                 small: 0,
                 medium: 0,
                 large: 0,
-                total: 0
+                total: 0,
             },
+              
             paymentMessage: '',
             init() {
                 const url = `https://pizza-api.projectcodex.net/api/pizzas`;
 
                 axios.get(url).then((result) => {
                     const pizzas = result.data.pizzas;
-
-                    // Modify the pizza prices
                     pizzas[0].price = 129;
                     pizzas[1].price = 79;
                     pizzas[2].price = 49;
 
                     this.pizzas = pizzas;
                 }).catch((error) => {
-                    console.error('Error fetching pizzas:', error);
+                    // console.error('Error fetching pizzas:', error);
                 });
             },
             addToCart(pizza) {
@@ -87,3 +101,5 @@ document.addEventListener('alpine:init', () => {
         }
     });
 });
+
+

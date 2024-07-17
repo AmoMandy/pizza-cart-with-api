@@ -12,10 +12,24 @@
 </head>
 
 <body>
-    <div class="ID">
-    <div> usename: 'AmoMandy'</div>
-    <div>cart_code : "rTPVoApZHz"</div>
-</div>
+    <div x-data="loginData" class="ID">
+        <template x-if="!loggedIn">
+            <div>
+                <h2>Login</h2>
+                <label for="username">Username:</label>
+                <input type="text" id="username" x-model="username">
+                <button @click="login">Login</button>
+            </div>
+        </template>
+
+        <template x-if="loggedIn">
+            <div>
+                <h2>Welcome, <span x-text="username"></span></h2>
+                <button @click="logout">Logout</button>
+                <div>cart_code : "rTPVoApZHz"</div>
+            </div>
+        </template>
+    </div>
     <div x-data="pizzaCartAPI">
         <h1>Pizza Cart</h1>
         <h2>Cart</h2>

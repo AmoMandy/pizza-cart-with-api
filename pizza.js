@@ -1,45 +1,52 @@
 document.addEventListener('alpine:init', () => {
-    Alpine.data('loginData', () => ({
-        username: '',
-        loggedIn: false,
 
-        login() {
-            if (this.username) {
-                this.loggedIn = true;
-            }
-        },
-
-        logout() {
-            this.loggedIn = false;
-            this.username = '';
-        }
-    }));
     Alpine.data('pizzaCartAPI', function () {
         return {
             pizzas: [],
-            // username: 'AmoMandy',
+            username: '',
+            loggedIn: false,
             cart: [],
+            cartCode: '',
             totals: {
                 small: 0,
                 medium: 0,
                 large: 0,
                 total: 0,
             },
-              
+
             paymentMessage: '',
             init() {
+                // create (){}
+                if (this.loggedIn) {
+                    const url = `https://pizza-api.projectcodex.net/api/pizzas`;
+                    axios.get(url).then((result) => {
+                        const pizzas = result.data.pizzas;
+                        pizzas[0].price = 129;
+                        pizzas[1].price = 79;
+                        pizzas[2].price = 49;
+
+                        this.pizzas = pizzas;
+                    }).catch((error) => {
+                        // console.error('Error fetching pizzas:', error);
+                    });
+                } else {
+                    console.log('Not logged in!');
+                }
+
+            },
+            createPizzaCart() {
+                axios.get(`https://pizza-api.projectcodex.net/api/pizza-cart/create?username=${this.username}`).then(res => {
+                    this.cartCode = res.data.cart_code;
+                })
+            },
+            showPizzaMenu(){
                 const url = `https://pizza-api.projectcodex.net/api/pizzas`;
-
-                axios.get(url).then((result) => {
-                    const pizzas = result.data.pizzas;
-                    pizzas[0].price = 129;
-                    pizzas[1].price = 79;
-                    pizzas[2].price = 49;
-
-                    this.pizzas = pizzas;
-                }).catch((error) => {
-                    // console.error('Error fetching pizzas:', error);
-                });
+                    axios.get(url).then((result) => {
+                        const pizzas = result.data.pizzas;
+                        this.pizzas = pizzas;
+                    }).catch((error) => {
+                        // console.error('Error fetching pizzas:', error);
+                    });
             },
             addToCart(pizza) {
                 const existingPizza = this.cart.find(item => item.id === pizza.id);
@@ -91,6 +98,31 @@ document.addEventListener('alpine:init', () => {
             showOrders() {
                 // Implement the function to show historical orders
             },
+
+            login() {
+                // if(this.username.length > 2) {
+                //     localStorage['username'] = this.username;
+                //     this.createcart();
+                // }else {
+                //     alert("Username is too short");
+                // }
+                if (this.username) {
+                    this.createPizzaCart();
+                    this.showPizzaMenu();
+                    this.loggedIn = true;
+                }
+            },
+
+            logout() {
+                if (confirm('Do you want to logout?')) {
+                    this.username = '';
+                    this.cart = '';
+                    localStorage['cart'] = '';
+                    localStorage['username'] = '';
+                }
+                // this.loggedIn = false;
+                // this.username = '';
+            }
             // addToCart(index) {
             //     this.cart[index].quantity--;
             //     if (this.cart[index].quantity === 0) {
@@ -99,6 +131,7 @@ document.addEventListener('alpine:init', () => {
             //     this.updateTotals();
             // }
         }
+
     });
 });
 

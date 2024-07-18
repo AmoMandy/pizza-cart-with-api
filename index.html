@@ -12,7 +12,9 @@
 </head>
 
 <body>
-    <div x-data="loginData" class="ID">
+    <div x-data="pizzaCartAPI" class="ID">
+
+
         <template x-if="!loggedIn">
             <div>
                 <h2>Login</h2>
@@ -26,112 +28,113 @@
             <div>
                 <h2>Welcome, <span x-text="username"></span></h2>
                 <button @click="logout">Logout</button>
-                <div>cart_code : "rTPVoApZHz"</div>
+                <div>cart_code : <span x-text="cartCode"></span></div>
             </div>
         </template>
-    </div>
-    <div x-data="pizzaCartAPI">
-        <h1>Pizza Cart</h1>
-        <h2>Cart</h2>
-        <div x-show="cart.length > 0">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                        <th>Decrement</th>
-                        <th>Increment</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <template x-for="(pizza, index) in cart" :key="pizza.id">
+
+        <div x-show="loggedIn" >
+            <h1>Pizza Cart</h1>
+            <h2>Cart</h2>
+            <div x-show="cart.length > 0">
+                <table>
+                    <thead>
                         <tr>
-                            <td x-text="pizza.name"></td>
-                            <td x-text="pizza.quantity"></td>
-                            <td>R<span x-text="pizza.price"></span></td>
-                            <td>R<span x-text="pizza.price * pizza.quantity"></span></td>
-                            <td>
-                                <button @click="removeFromCart(index)">-</button>
-                            </td>
-                            <td>
-                                <button @click="addToCart(pizza)">+</button>
-                            </td>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Decrement</th>
+                            <th>Increment</th>
                         </tr>
-                    </template>
-                </tbody>
-            </table>
-            <p>Total: R<span x-text="totals.total"></span></p>
-            <input type="number" placeholder="Enter payment amount">
-            <button @click="processPayment">Check Out</button>
-        </div>
-        <p x-text="paymentMessage"></p>
-        <div x-show="cart.length === 0">
-            <p>Your cart is empty.</p>
-        </div>
-        <h2>Featured Pizzas</h2>
-        <div class="featured-pizzas">
-            <template x-for="pizza in pizzas.slice(0, 1)">
-                <div class="pizza">
-                    <h2>Large Pizza</h2>
-                    <img src="https://www.thedietchefs.com/wp-content/uploads/2022/03/air-fryer-tortilla-pizza-recipe-768x1152.jpg"
-                        width="115">
-                    <h3 x-text="pizza.name"></h3>
-                    <p x-text="pizza.description"></p>
-                    <p>Price: R<span x-text="129"></span></p>
-                    <div>
-                        Large mageritha pizza with 3 topping. 3 meat toppings. 3 or less other toppings.
-                    </div>
-                    <button @click="addToCart(pizza)">Buy</button>
-                </div>
-            </template>
-            <template x-for="pizza in pizzas.slice(1, 2)">
-                <div class="pizza">
-                    <h2>Medium Pizza</h2>
-                    <img src="https://th.bing.com/th/id/OIP.U6zVCfyt_g6JSTVGMMZjIAHaJQ?w=819&h=1024&rs=1&pid=ImgDetMain"
-                        width="135">
-                    <h3 x-text="pizza.name"></h3>
-                    <p x-text="pizza.description"></p>
-                    <p>Price: R<span x-text="79"></span></p>
-                    <div>
-                        medium mageritha pizza with 3 topping max. 2 or less toppings. 3 or less other toppings.
-                    </div>
-                    <button @click="addToCart(pizza)">Buy</button>
-                </div>
-            </template>
-            <template x-for="pizza in pizzas.slice(2, 3)">
-                <div class="pizza">
-                    <h2>Small Pizza</h2>
-                    <img src="https://th.bing.com/th/id/R.a1a65e12909e0a674439e61ec5fffda0?rik=rVMhNFoMDwcrEw&riu=http%3a%2f%2fwww.enhealthy.com%2fwp-content%2fuploads%2f2020%2f04%2fEasy-vegan-blue-pizza-7-main-dishes.jpg&ehk=CB0J72a%2b7nVE0RtxSagRxqu%2b6wqyFqK5mm7Vi1W%2baKk%3d&risl=&pid=ImgRaw&r=0"
-                        width="125">
-                    <h3 x-text="pizza.name"></h3>
-                    <p x-text="pizza.description"></p>
-                    <p>Price: R<span x-text="49"></span></p>
-                    <div>
-                        small pizza with 3 toppings 1 meat topping. 3 or less other topping.
-                    </div>
-                    <button @click="addToCart(pizza)">Buy</button>
-                </div>
-            </template>
-        </div>
-        <h2>All Pizzas</h2>
-
-        <template x-for="pizza in pizzas">
-            <div class="pizza1">
-                <img src="image.png" width="100">
-                <span x-text="pizza.flavour"></span>
-                <!-- <span x-text="pizza.id"></span> -->
-                <span x-text="pizza.size"></span>
-                <span x-text="pizza.price"></span>
-                <button @click="addToCart(pizza)">Add to cart</button>
+                    </thead>
+                    <tbody>
+                        <template x-for="(pizza, index) in cart" :key="pizza.id">
+                            <tr>
+                                <td x-text="pizza.name"></td>
+                                <td x-text="pizza.quantity"></td>
+                                <td>R<span x-text="pizza.price"></span></td>
+                                <td>R<span x-text="pizza.price * pizza.quantity"></span></td>
+                                <td>
+                                    <button @click="removeFromCart(index)">-</button>
+                                </td>
+                                <td>
+                                    <button @click="addToCart(pizza)">+</button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <p>Total: R<span x-text="totals.total"></span></p>
+                <input type="number" placeholder="Enter payment amount">
+                <button @click="processPayment">Check Out</button>
             </div>
-        </template>
+            <p x-text="paymentMessage"></p>
+            <div x-show="cart.length === 0">
+                <p>Your cart is empty.</p>
+            </div>
+            <h2>Featured Pizzas</h2>
+            <div class="featured-pizzas">
+                <template x-for="pizza in pizzas.slice(0, 1)">
+                    <div class="pizza">
+                        <h2>Large Pizza</h2>
+                        <img src="https://www.thedietchefs.com/wp-content/uploads/2022/03/air-fryer-tortilla-pizza-recipe-768x1152.jpg"
+                            width="115">
+                        <h3 x-text="pizza.name"></h3>
+                        <p x-text="pizza.description"></p>
+                        <p>Price: R<span x-text="129"></span></p>
+                        <div>
+                            Large mageritha pizza with 3 topping. 3 meat toppings. 3 or less other toppings.
+                        </div>
+                        <button @click="addToCart(pizza)">Buy</button>
+                    </div>
+                </template>
+                <template x-for="pizza in pizzas.slice(1, 2)">
+                    <div class="pizza">
+                        <h2>Medium Pizza</h2>
+                        <img src="https://th.bing.com/th/id/OIP.U6zVCfyt_g6JSTVGMMZjIAHaJQ?w=819&h=1024&rs=1&pid=ImgDetMain"
+                            width="135">
+                        <h3 x-text="pizza.name"></h3>
+                        <p x-text="pizza.description"></p>
+                        <p>Price: R<span x-text="79"></span></p>
+                        <div>
+                            medium mageritha pizza with 3 topping max. 2 or less toppings. 3 or less other toppings.
+                        </div>
+                        <button @click="addToCart(pizza)">Buy</button>
+                    </div>
+                </template>
+                <template x-for="pizza in pizzas.slice(2, 3)">
+                    <div class="pizza">
+                        <h2>Small Pizza</h2>
+                        <img src="https://th.bing.com/th/id/R.a1a65e12909e0a674439e61ec5fffda0?rik=rVMhNFoMDwcrEw&riu=http%3a%2f%2fwww.enhealthy.com%2fwp-content%2fuploads%2f2020%2f04%2fEasy-vegan-blue-pizza-7-main-dishes.jpg&ehk=CB0J72a%2b7nVE0RtxSagRxqu%2b6wqyFqK5mm7Vi1W%2baKk%3d&risl=&pid=ImgRaw&r=0"
+                            width="125">
+                        <h3 x-text="pizza.name"></h3>
+                        <p x-text="pizza.description"></p>
+                        <p>Price: R<span x-text="49"></span></p>
+                        <div>
+                            small pizza with 3 toppings 1 meat topping. 3 or less other topping.
+                        </div>
+                        <button @click="addToCart(pizza)">Buy</button>
+                    </div>
+                </template>
+            </div>
+            <h2>All Pizzas</h2>
+
+            <template x-for="pizza in pizzas">
+                <div class="pizza1">
+                    <img src="image.png" width="100">
+                    <span x-text="pizza.flavour"></span>
+                    <!-- <span x-text="pizza.id"></span> -->
+                    <span x-text="pizza.size"></span>
+                    <span x-text="pizza.price"></span>
+                    <button @click="addToCart(pizza)">Add to cart</button>
+                </div>
+            </template>
 
 
+
+        </div>
 
     </div>
-
 </body>
 
 </html>

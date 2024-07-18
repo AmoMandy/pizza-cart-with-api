@@ -19,8 +19,8 @@ POST https://pizza-api.projectcodex.net/api/pizza-cart/add
 content-type: application/json
 
 {
-    "cart_code" : "rTPVoApZHz",
-    "pizza_id" : 9
+    "cart_code" : "3oqDUyYZrC",
+    "pizza_id" : 78
 }
 
 ### Add a pizza to the cart
@@ -29,6 +29,6 @@ POST https://pizza-api.pizza-api.projectcodex.net/api/pizza-cart/add
 content-type: application/json
 
 {
-    "cart_code" : "rTPVoApZHz",
+    "cart_code" : "",
     "pizza_id" : 8
 }

@@ -5,7 +5,7 @@ document.addEventListener('alpine:init', () => {
             pizzas: [],
             username: '',
             loggedIn: false,
-            cart: [],
+            cartId: [],
             cartCode: '',
             totals: {
                 small: 0,
@@ -21,9 +21,9 @@ document.addEventListener('alpine:init', () => {
                     const url = `https://pizza-api.projectcodex.net/api/pizzas`;
                     axios.get(url).then((result) => {
                         const pizzas = result.data.pizzas;
-                        pizzas[0].price = 129;
-                        pizzas[1].price = 79;
-                        pizzas[2].price = 49;
+                        pizzas[0].price = 104.99;
+                        pizzas[1].price = 99.99;
+                        pizzas[2].price = 106.99;
 
                         this.pizzas = pizzas;
                     }).catch((error) => {
@@ -36,17 +36,30 @@ document.addEventListener('alpine:init', () => {
             },
             createPizzaCart() {
                 axios.get(`https://pizza-api.projectcodex.net/api/pizza-cart/create?username=${this.username}`).then(res => {
+
+                    const cartId = localStorage['cartId'];
+
+                    if (cartId) {
+                        this.cartId = cartId;
+                    } else {
+                        const creatCartURL = `https://pizza-api.projectcodex.net/api/pizza-cart/create?username=${this.username}`
+                        return axios.get[creatCartURL]
+                        .then(result => {
+                       this.cartId = result.data.cart_code
+                        localStorage['cartId'] = this.cartId;
+                        });
+                    }
                     this.cartCode = res.data.cart_code;
                 })
             },
-            showPizzaMenu(){
+            showPizzaMenu() {
                 const url = `https://pizza-api.projectcodex.net/api/pizzas`;
-                    axios.get(url).then((result) => {
-                        const pizzas = result.data.pizzas;
-                        this.pizzas = pizzas;
-                    }).catch((error) => {
-                        // console.error('Error fetching pizzas:', error);
-                    });
+                axios.get(url).then((result) => {
+                    const pizzas = result.data.pizzas;
+                    this.pizzas = pizzas;
+                }).catch((error) => {
+                    // console.error('Error fetching pizzas:', error);
+                });
             },
             addToCart(pizza) {
                 const existingPizza = this.cart.find(item => item.id === pizza.id);
@@ -117,11 +130,12 @@ document.addEventListener('alpine:init', () => {
                 if (confirm('Do you want to logout?')) {
                     this.username = '';
                     this.cart = '';
-                    localStorage['cart'] = '';
+                    localStorage['cartId'] = '';
                     localStorage['username'] = '';
                 }
-                // this.loggedIn = false;
-                // this.username = '';
+                
+                 this.loggedIn = false;
+                 this.username = '';
             }
             // addToCart(index) {
             //     this.cart[index].quantity--;

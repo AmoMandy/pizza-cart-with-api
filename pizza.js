@@ -5,7 +5,7 @@ document.addEventListener('alpine:init', () => {
             pizzas: [],
             username: '',
             loggedIn: false,
-            cartId: [],
+            cart: [],
             cartCode: '',
             totals: {
                 small: 0,
@@ -134,8 +134,8 @@ document.addEventListener('alpine:init', () => {
                     localStorage['username'] = '';
                 }
                 
-                 this.loggedIn = false;
-                 this.username = '';
+                  this.loggedIn = false;
+                 this.cart_code = '';
             }
             // addToCart(index) {
             //     this.cart[index].quantity--;

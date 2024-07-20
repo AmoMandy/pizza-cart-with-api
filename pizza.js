@@ -16,6 +16,25 @@ document.addEventListener('alpine:init', () => {
 
             paymentMessage: '',
             init() {
+                const storedUsername = localStorage.getItem('username');
+                const storedCartCode = localStorage.getItem('cartCode');
+                const storedCart = localStorage.getItem('cart');
+
+                if (storedUsername) {
+                    this.username = storedUsername;
+                    this.loggedIn = true;
+                } if (storedCartCode) {
+                    this.cartCode = storedCartCode;
+                }
+
+                if (storedCart) {
+                    this.cart = JSON.parse(storedCart);
+                    this.updateTotals();
+                }
+                // const storedUsername = localStorage['username'];
+                if (storedUsername) {
+                    this.username = storedUsername;
+                 }
                 // create (){}
                 if (this.loggedIn) {
                     const url = `https://pizza-api.projectcodex.net/api/pizzas`;

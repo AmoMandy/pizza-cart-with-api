@@ -32,7 +32,7 @@
             </div>
         </template>
 
-        <div x-show="loggedIn" >
+        <div x-show="loggedIn">
             <h1>Pizza Cart</h1>
             <h2>Cart</h2>
             <div x-show="cart.length > 0">
@@ -52,8 +52,8 @@
                             <tr>
                                 <td x-text="pizza.name"></td>
                                 <td x-text="pizza.quantity"></td>
-                                <td>R<span x-text="pizza.price"></span></td>
-                                <td>R<span x-text="pizza.price * pizza.quantity"></span></td>
+                                <td>R<span x-text="pizza.price.toFixed(2)"></span></td>
+                                <td>R<span x-text="(pizza.price * pizza.quantity).toFixed(2)"></span></td>
                                 <td>
                                     <button @click="removeFromCart(index)">-</button>
                                 </td>
@@ -64,11 +64,11 @@
                         </template>
                     </tbody>
                 </table>
-                <p>Total: R<span x-text="totals.total"></span></p>
+                <p>Total: R<span x-text="totals.total.toFixed(2)" ></span></p>
                 <input type="number" placeholder="Enter payment amount">
                 <button @click="processPayment">Check Out</button>
             </div>
-            <p x-text="paymentMessage"></p>
+            <p :class="{'text-red-500': paymentMessageType === 'error', 'text-green-500': paymentMessageType === 'success'}" x-text="paymentMessage"></p>
             <div x-show="cart.length === 0">
                 <p>Your cart is empty.</p>
             </div>
@@ -130,9 +130,24 @@
                 </div>
             </template>
 
-
-
+            <!-- <h2>Your Orders</h2>
+            <div x-show="orders.length > 0">
+                <ul>
+                    <template x-for="order in orders" :key="order.id">
+                        <li>
+                            <strong>Order ID:</strong> <span x-text="order.id"></span>
+                            <strong>Total:</strong> R<span x-text="order.total.toFixed(2)"></span>
+                            <strong>Date:</strong> <span x-text="order.date"></span>
+                        </li>
+                    </template>
+                </ul>
+            </div> -->
+            <div x-show="orders.length === 0">
+                <p>You have no historical orders.</p>
+            </div>
         </div>
+
+    </div>
 
     </div>
 </body>
